@@ -5,31 +5,12 @@ plugins {
 }
 
 repositories {
-    maven() {
-        url 'https://dl.bintray.com/mockito/maven/'
-        content {
-            includeGroup 'org.mockito'
-        }
-    }
     mavenCentral()
 }
 
 dependencies {
-
-    def junitJupiterVersion = '5.4.1'
-    def junitPlatformVersion = '1.4.1'
-    def mockitoVersion = '2.25.7'
-
-    testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
-    testCompile("org.junit.jupiter:junit-jupiter-params:${junitJupiterVersion}")
-
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
-    testRuntime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}") {
-        because 'allows tests to run from IDEs that bundle older version of launcher'
-    }
-
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     testImplementation 'org.assertj:assertj-core:3.12.2'
-    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
     testImplementation 'com.approvaltests:approvaltests:2.0.2'
 }
 
@@ -42,4 +23,7 @@ targetCompatibility = '11'
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
