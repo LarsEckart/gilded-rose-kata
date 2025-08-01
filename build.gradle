@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'jacoco'
-    id 'info.solidsoft.pitest' version '1.15.0'
+    id 'info.solidsoft.pitest' version '1.19.0-rc.1'
 }
 
 java {
@@ -19,6 +19,7 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:5.13.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.assertj:assertj-core:3.27.3")
     testImplementation("com.approvaltests:approvaltests:25.0.23")
     testImplementation("com.larseckart:junit-tcr-extensions:1.0.0")
@@ -33,6 +34,7 @@ tasks.withType(JavaCompile) {
 
 test {
     useJUnitPlatform()
+    failOnNoDiscoveredTests = false
     testLogging {
         events "passed", "skipped", "failed"
     }
@@ -40,7 +42,7 @@ test {
 }
 
 jacoco {
-    toolVersion = "0.8.7"
+    toolVersion = "0.8.12"
 }
 
 jacocoTestReport {
@@ -48,17 +50,17 @@ jacocoTestReport {
     reports {
         xml.required = false
         csv.required = false
-        html.destination file("${buildDir}/jacocoHtml")
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
     }
 }
 
 project.tasks.check.dependsOn("pitest")
 pitest {
-    junit5PluginVersion = '0.15'
+    junit5PluginVersion = '1.2.1'
     testSourceSets = [sourceSets.test]
     mainSourceSets = [sourceSets.main]
-    targetClasses = ['ferry.booking.*']
-    pitestVersion = '1.7.0'
+    targetClasses = ['com.gildedrose.*']
+    pitestVersion = '1.18.0'
     threads = 4
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
